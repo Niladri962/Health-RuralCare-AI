@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="RuralCare AI Healthcare Triage Assistant"
+    >
+
+    <title>RuralCare AI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-top">
+
+            <div class="brand">
+                <div class="brand-logo">
+                    <span>+</span>
+                </div>
+
+                <div class="brand-text">
+                    <h1>RuralCare</h1>
+                    <p>AI Healthcare Assistant</p>
+                </div>
+            </div>
+
+            <button
+                class="new-chat-button"
+                id="newChatButton"
+                type="button"
+            >
+                <span class="new-chat-icon">＋</span>
+                <span id="newChatText">New consultation</span>
+            </button>
+
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-section-header">
+
+                <div class="sidebar-section-title" id="recentTitle">
+                    Recent consultations
+                </div>
+
+                <button
+                    class="clear-history-button hidden"
+                    id="clearHistoryButton"
+                    type="button"
+                    title="Clear all chats"
+                >
+                    <span id="clearHistoryText">Clear all</span>
+                </button>
+
+            </div>
+
+            <div
+                class="conversation-history"
+                id="conversationHistory"
+            >
+                <!-- Conversations are inserted here -->
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="safety-card">
+
+                <div class="safety-icon">
+                    !
+                </div>
+
+                <div>
+                    <strong id="emergencyTitle">
+                        Emergency?
+                    </strong>
+
+                    <p id="emergencyText">
+                        If someone is in immediate danger, call 112
+                        or go to the nearest emergency department.
+                    </p>
+                </div>
+
+            </div>
+
+            <button
+                class="sidebar-info-button"
+                id="aboutButton"
+                type="button"
+            >
+                <span>ⓘ</span>
+                <span id="aboutText">About RuralCare</span>
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN AREA
+    ========================== -->
+    <main class="main-area">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="mobile-menu-button"
+                    id="mobileMenuButton"
+                    type="button"
+                    aria-label="Open menu"
+                >
+                    ☰
+                </button>
+
+                <div class="mobile-brand">
+                    <div class="mobile-brand-logo">+</div>
+                    <span>RuralCare</span>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <label
+                    class="language-control"
+                    for="languageSelect"
+                >
+                    <span class="language-icon">文</span>
+
+                    <select
+                        id="languageSelect"
+                        aria-label="Select language"
+                    >
+                        <option value="English">
+                            English
+                        </option>
+
+                        <option value="Hindi">
+                            हिन्दी
+                        </option>
+
+                        <option value="Marathi">
+                            मराठी
+                        </option>
+
+                        <option value="Punjabi">
+                            ਪੰਜਾਬੀ
+                        </option>
+
+                        <option value="Bengali">
+                            বাংলা
+                        </option>
+                    </select>
+
+                    <span class="select-arrow">⌄</span>
+                </label>
+
+            </div>
+
+        </header>
+
+
+        <!-- CHAT AREA -->
+        <section class="chat-container">
+
+            <div
+                class="chat-scroll-area"
+                id="chatScrollArea"
+            >
+
+                <!-- =========================
+                     WELCOME SCREEN
+                ========================== -->
+                <div
+                    class="welcome-screen"
+                    id="welcomeScreen"
+                >
+
+                    <div class="welcome-logo">
+                        <span>+</span>
+                    </div>
+
+                    <h2 id="welcomeTitle">
+                        How can we help you today?
+                    </h2>
+
+                    <p
+                        class="welcome-description"
+                        id="welcomeDescription"
+                    >
+                        Describe your symptoms, health concern,
+                        or question in your own words.
+                    </p>
+
+                    <div class="welcome-notice">
+
+                        <div class="notice-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong id="noticeTitle">
+                                Healthcare guidance, not a diagnosis
+                            </strong>
+
+                            <p id="noticeText">
+                                RuralCare helps understand your concern
+                                and identify how urgently you may need
+                                medical attention.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     MESSAGES
+                ========================== -->
+                <div
+                    class="messages"
+                    id="messages"
+                >
+                    <!-- Messages inserted here -->
+                </div>
+
+
+                <!-- TYPING INDICATOR -->
+                <div
+                    class="typing-row hidden"
+                    id="typingIndicator"
+                >
+
+                    <div class="assistant-avatar small">
+                        +
+                    </div>
+
+                    <div class="typing-bubble">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 COMPOSER
+            ========================== -->
+            <div class="composer-area">
+
+                <form
+                    class="composer"
+                    id="chatForm"
+                >
+
+                    <textarea
+                        id="messageInput"
+                        rows="1"
+                        autocomplete="off"
+                        spellcheck="true"
+                        placeholder="Describe your symptoms or health concern..."
+                        aria-label="Message RuralCare"
+                    ></textarea>
+
+
+                    <div class="composer-actions">
+
+                        <button
+                            type="button"
+                            class="icon-button microphone-button"
+                            id="microphoneButton"
+                            title="Voice input"
+                            aria-label="Voice input"
+                        >
+                            <span id="microphoneIcon">🎙</span>
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="send-button"
+                            id="sendButton"
+                            title="Send message"
+                            aria-label="Send message"
+                        >
+                            <span>↑</span>
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <div class="composer-footer">
+
+                    <span id="composerDisclaimer">
+                        RuralCare can make mistakes. For emergencies,
+                        contact local emergency services.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     ABOUT MODAL
+========================== -->
+<div
+    class="modal-overlay hidden"
+    id="aboutModal"
+>
+
+    <div class="modal">
+
+        <button
+            class="modal-close"
+            id="aboutModalClose"
+            type="button"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+        <div class="modal-icon">
+            +
+        </div>
+
+        <h2 id="modalTitle">
+            About RuralCare
+        </h2>
+
+        <p id="modalText">
+            RuralCare is an AI-assisted healthcare triage interface
+            designed to help people describe health concerns and
+            understand the appropriate level of care.
+        </p>
+
+        <div class="modal-warning">
+            <strong id="modalWarningTitle">
+                Important
+            </strong>
+
+            <p id="modalWarningText">
+                This service does not replace a qualified healthcare
+                professional and should not be used as a diagnosis.
+            </p>
+        </div>
+
+        <button
+            class="modal-primary-button"
+            id="modalDoneButton"
+            type="button"
+        >
+            Done
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     EMERGENCY MODAL
+========================== -->
+<div
+    class="modal-overlay hidden"
+    id="emergencyModal"
+>
+
+    <div class="modal emergency-modal">
+
+        <button
+            class="modal-close"
+            id="emergencyModalClose"
+            type="button"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+        <div class="emergency-large-icon">
+            !
+        </div>
+
+        <h2 id="emergencyModalTitle">
+            Possible emergency
+        </h2>
+
+        <p id="emergencyModalText">
+            Some symptoms may require immediate medical attention.
+            Please contact emergency services or go to the nearest
+            emergency department.
+        </p>
+
+        <div class="emergency-number">
+            <span id="callText">Emergency services</span>
+            <strong>112</strong>
+        </div>
+
+        <button
+            class="modal-primary-button emergency-button"
+            id="emergencyDoneButton"
+            type="button"
+        >
+            I understand
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     CLEAR ALL CHATS MODAL
+========================== -->
+<div
+    class="modal-overlay hidden"
+    id="clearModal"
+>
+
+    <div class="modal">
+
+        <button
+            class="modal-close"
+            id="clearModalClose"
+            type="button"
+            aria-label="Close"
+        >
+            &times;
+        </button>
+
+        <div class="modal-icon modal-icon-danger">
+            &#10005;
+        </div>
+
+        <h2 id="clearModalTitle">
+            Clear all chats?
+        </h2>
+
+        <p id="clearModalText">
+            This permanently deletes every saved consultation on this
+            device. This action cannot be undone.
+        </p>
+
+        <div class="modal-actions">
+
+            <button
+                class="modal-secondary-button"
+                id="clearCancelButton"
+                type="button"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="modal-primary-button modal-danger-button"
+                id="clearConfirmButton"
+                type="button"
+            >
+                Clear all chats
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script
+    src="{{ url_for('static', path='js/app.js') }}"
+    defer
+></script>
+
+</body>
+</html>
