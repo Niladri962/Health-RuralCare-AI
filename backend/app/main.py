@@ -5,32 +5,29 @@ import sys
 
 import httpx
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-
-
-# =========================================================
-# PATHS
-# =========================================================
-
-BASE_DIR = Path(__file__).resolve().parent
-
-TEMPLATES_DIR = BASE_DIR / "templates"
-STATIC_DIR = BASE_DIR / "static"
-
-ENV_FILE = BASE_DIR.parent / ".env"
 
 
 # =========================================================
 # ENVIRONMENT
 # =========================================================
 
+ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
+
 load_dotenv(ENV_FILE)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
+
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "ALLOWED_ORIGINS",
+        "http://localhost:5173,http://127.0.0.1:5173",
+    ).split(",")
+    if origin.strip()
+]
 
 GROQ_MODEL = os.getenv(
     "GROQ_MODEL",
@@ -50,24 +47,12 @@ app = FastAPI(
     version="2.0.0",
 )
 
-
-# =========================================================
-# STATIC FILES
-# =========================================================
-
-app.mount(
-    "/static",
-    StaticFiles(directory=str(STATIC_DIR)),
-    name="static",
-)
-
-
-# =========================================================
-# JINJA TEMPLATES
-# =========================================================
-
-templates = Jinja2Templates(
-    directory=str(TEMPLATES_DIR)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -306,23 +291,6 @@ def detect_emergency(
             continue
 
     return False
-
-
-# =========================================================
-# HOME PAGE
-# =========================================================
-
-@app.get(
-    "/",
-    response_class=HTMLResponse
-)
-async def home(request: Request):
-
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={}
-    )
 
 
 # =========================================================

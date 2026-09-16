@@ -12,6 +12,10 @@
 
 const STORAGE_KEY = "ruralcare_conversations_v2";
 const LANGUAGE_KEY = "ruralcare_language_v2";
+const API_BASE_URL = (
+    window.RURALCARE_API_URL
+    || "http://127.0.0.1:8000"
+).replace(/\/$/, "");
 
 
 /* =========================================================
@@ -1514,7 +1518,7 @@ async function handleSubmit(event) {
 
         const response =
             await fetch(
-                "/chat",
+                `${API_BASE_URL}/chat`,
                 {
                     method: "POST",
 

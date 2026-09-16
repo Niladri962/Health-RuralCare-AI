@@ -1,0 +1,1 @@
+window.RURALCARE_API_URL = "";

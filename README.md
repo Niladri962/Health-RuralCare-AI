@@ -9,7 +9,7 @@ Patient
 ↓
 Web Interface
 ↓
-FastAPI
+FastAPI API
 ↓
 LangGraph
 ↓
@@ -43,7 +43,7 @@ Response
 - Scheduling agent
 - LangGraph orchestration
 - FastAPI backend
-- React frontend
+- Standalone frontend
 - Voice input architecture
 - Appointment architecture
 - Render deployment configuration
@@ -78,11 +78,11 @@ python -m uvicorn app.main:app --reload
 
 ### Frontend
 
-cd frontend
+The frontend is plain HTML, CSS, and JavaScript, so it has no install or build step.
 
-npm install
-
-npm run dev
+From the repository root, run `python -m http.server 5173 --directory frontend`.
+Set `window.RURALCARE_API_URL` in `frontend/config.js` to the deployed backend URL
+before deploying the frontend.
 
 
 Frontend:
@@ -96,3 +96,14 @@ http://127.0.0.1:8000
 Swagger:
 
 http://127.0.0.1:8000/docs
+
+## Vercel deployment
+
+Create a Vercel project from this repository and set its **Root Directory** to
+`frontend`. The frontend can be deployed as a static project with no build command
+and `.` as the output directory.
+
+Deploy the `backend` separately as a Python service (for example on Render), then
+set that service URL in `frontend/config.js` and add both the Vercel URL and local
+frontend URLs to the backend `ALLOWED_ORIGINS` environment variable. Both folders
+remain in the same repository and can be deployed from one commit.

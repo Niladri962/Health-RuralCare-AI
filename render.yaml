@@ -38,9 +38,9 @@ services:
 
     rootDir: frontend
 
-    buildCommand: npm install && npm run build
+    buildCommand: ""
 
-    staticPublishPath: frontend/dist
+    staticPublishPath: .
 
     envVars:
 
