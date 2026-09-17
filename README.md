@@ -2,26 +2,28 @@
 
 > An AI-powered, multilingual healthcare triage assistant designed to improve access to preliminary healthcare guidance for rural and semi-urban communities in India.
 
-RuralCare AI is an **agentic healthcare triage prototype** that uses conversational AI, multilingual interaction, voice input architecture, and an agent-based workflow to help users describe their health concerns and receive appropriate preliminary triage guidance.
+RuralCare AI is an **agentic healthcare triage prototype** that combines conversational AI, multilingual interaction, voice-input architecture, emergency awareness, and agent-based workflows.
 
-The system is designed with a focus on **accessibility, simplicity, multilingual support, emergency awareness, and responsible AI-assisted healthcare guidance**.
+The project explores how AI can assist users in describing their health concerns, understanding the potential urgency of their symptoms, and navigating toward appropriate healthcare support.
+
+> ⚠️ **Important:** RuralCare AI is a prototype and does not replace doctors, healthcare professionals, diagnosis, or emergency medical services.
 
 ---
 
-## 🌍 Why RuralCare AI?
+## 🌍 Problem Statement
 
-Access to healthcare can be challenging in rural and semi-urban regions because of:
+People in rural and semi-urban communities can face several barriers when accessing healthcare, including:
 
 - Limited availability of healthcare professionals
-- Long travel distances to healthcare facilities
+- Long distances to healthcare facilities
 - Language barriers
 - Limited awareness of healthcare options
-- Difficulty determining the urgency of symptoms
+- Difficulty understanding the urgency of symptoms
 - Delays in seeking appropriate medical attention
 
-RuralCare AI explores how conversational AI and agentic workflows can assist users in the **initial healthcare triage process**.
+RuralCare AI explores the use of conversational AI and agentic systems to provide an accessible first layer of healthcare guidance.
 
-The system does **not replace doctors or medical professionals**. Instead, it aims to provide preliminary guidance and help users understand what level of care may be appropriate.
+The objective is **not to replace healthcare professionals**, but to explore how AI can assist users before they reach appropriate medical care.
 
 ---
 
@@ -29,20 +31,20 @@ The system does **not replace doctors or medical professionals**. Instead, it ai
 
 ### 💬 Conversational Healthcare Assistant
 
-Users can describe their symptoms and health concerns using a natural-language chat interface.
+Users can describe their health concerns using natural language.
 
-The assistant can:
+The assistant is designed to:
 
 - Understand symptom descriptions
 - Ask relevant follow-up questions
 - Maintain conversation context
 - Provide preliminary triage guidance
-- Highlight potentially urgent situations
-- Recommend seeking professional medical care when appropriate
+- Identify potentially urgent situations
+- Guide users toward appropriate medical care
 
 ---
 
-### 🌐 Multilingual Support
+### 🌐 Multilingual Interaction
 
 RuralCare AI is designed to support multiple Indian languages:
 
@@ -52,23 +54,38 @@ RuralCare AI is designed to support multiple Indian languages:
 - 🇮🇳 Punjabi
 - 🇮🇳 Bengali
 
-Users can change the language during a conversation while retaining their existing conversation history.
+Users can change the language during an ongoing conversation while preserving their conversation history.
 
 ---
 
-### 🧠 Agentic Architecture
+### 🧠 Agentic Healthcare Architecture
 
 The project is designed around an agent-based workflow using **LangGraph**.
 
-The proposed workflow consists of:
+The proposed workflow is:
 
 ```text
-User
-  ↓
-Planner Agent
-  ↓
-Triage Agent
-  ↓
-Scheduling Agent
-  ↓
-Response
+                    User
+                     │
+                     ▼
+              ┌─────────────┐
+              │   Planner   │
+              │    Agent    │
+              └──────┬──────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │   Triage    │
+              │    Agent    │
+              └──────┬──────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │ Scheduling  │
+              │    Agent    │
+              └──────┬──────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │  Response   │
+              └─────────────┘
