@@ -1,130 +1,74 @@
-# Rural Healthcare Triage Assistant
+# 🏥 RuralCare AI — Rural Healthcare Triage Assistant
 
-An agentic healthcare triage prototype designed
-for rural and semi-urban users in India.
+> An AI-powered, multilingual healthcare triage assistant designed to improve access to preliminary healthcare guidance for rural and semi-urban communities in India.
 
-## Architecture
+RuralCare AI is an **agentic healthcare triage prototype** that uses conversational AI, multilingual interaction, voice input architecture, and an agent-based workflow to help users describe their health concerns and receive appropriate preliminary triage guidance.
 
-Patient
-↓
-Web Interface
-↓
-FastAPI API
-↓
-LangGraph
-↓
-Planner Agent
-↓
-Triage Agent
-↓
-Scheduling Agent
-↓
-Response
+The system is designed with a focus on **accessibility, simplicity, multilingual support, emergency awareness, and responsible AI-assisted healthcare guidance**.
 
-Voice:
+---
 
-Microphone
-↓
-Whisper
-↓
-Text
-↓
-LangGraph
-↓
-Response
+## 🌍 Why RuralCare AI?
 
+Access to healthcare can be challenging in rural and semi-urban regions because of:
 
-## Features
+- Limited availability of healthcare professionals
+- Long travel distances to healthcare facilities
+- Language barriers
+- Limited awareness of healthcare options
+- Difficulty determining the urgency of symptoms
+- Delays in seeking appropriate medical attention
 
-- Chat-based healthcare interaction
-- Hindi/English language support
-- Planner agent
-- Triage agent
-- Scheduling agent
-- LangGraph orchestration
-- FastAPI backend
-- Standalone frontend
-- Voice input architecture
-- Appointment architecture
-- Render deployment configuration
+RuralCare AI explores how conversational AI and agentic workflows can assist users in the **initial healthcare triage process**.
 
+The system does **not replace doctors or medical professionals**. Instead, it aims to provide preliminary guidance and help users understand what level of care may be appropriate.
 
-## Local setup
+---
 
-### Backend
+# 🚀 Key Features
 
-cd backend
+### 💬 Conversational Healthcare Assistant
 
-python -m venv venv
+Users can describe their symptoms and health concerns using a natural-language chat interface.
 
-Windows PowerShell:
+The assistant can:
 
-.\venv\Scripts\Activate.ps1
+- Understand symptom descriptions
+- Ask relevant follow-up questions
+- Maintain conversation context
+- Provide preliminary triage guidance
+- Highlight potentially urgent situations
+- Recommend seeking professional medical care when appropriate
 
-Install:
+---
 
-pip install -r requirements.txt
+### 🌐 Multilingual Support
 
-Create `backend/.env` by copying `backend/.env.example`, then add your Groq key:
+RuralCare AI is designed to support multiple Indian languages:
 
-GROQ_API_KEY=your_key
+- 🇬🇧 English
+- 🇮🇳 Hindi
+- 🇮🇳 Marathi
+- 🇮🇳 Punjabi
+- 🇮🇳 Bengali
 
-OPENAI_API_KEY=your_key
+Users can change the language during a conversation while retaining their existing conversation history.
 
-The chat endpoint returns an error until `GROQ_API_KEY` is configured. Never commit
-`backend/.env` or publish the key in the frontend.
+---
 
-Start:
+### 🧠 Agentic Architecture
 
-python -m uvicorn app.main:app --reload
+The project is designed around an agent-based workflow using **LangGraph**.
 
-
-### Frontend
-
-The frontend is plain HTML, CSS, and JavaScript, so it has no install or build step.
-
-From the repository root, run `python -m http.server 5173 --directory frontend`.
-Set `window.RURALCARE_API_URL` in `frontend/config.js` to the deployed backend URL
-before deploying the frontend.
-
-
-Frontend:
-
-http://localhost:5173
-
-Backend:
-
-http://127.0.0.1:8000
-
-Swagger:
-
-http://127.0.0.1:8000/docs
-
-### Start both locally with one PowerShell command
-
-Run this from the repository root:
-
-```powershell
-Start-Process -FilePath (Resolve-Path .\venv\Scripts\python.exe).Path -ArgumentList '-m','uvicorn','app.main:app','--reload' -WorkingDirectory (Resolve-Path .\backend).Path; & .\venv\Scripts\python.exe -m http.server 5173 --directory .\frontend
-```
-
-The backend runs at `http://127.0.0.1:8000` and the frontend at
-`http://localhost:5173`. Running `python -m uvicorn app.main:app` from the
-repository root alone fails because the `app` package is inside `backend`.
-
-## Vercel deployment
-
-Create one Vercel project from the repository root. Do not set `frontend` as the
-Root Directory. Vercel uses `vercel.json` to serve `frontend/` and route `/api/*`
-to the FastAPI function in `api/index.py`.
-
-In the Vercel project settings, add:
+The proposed workflow consists of:
 
 ```text
-GROQ_API_KEY=your_groq_api_key
-GROQ_MODEL=openai/gpt-oss-120b
-```
-
-Then deploy once. The frontend automatically calls `/api/chat` on the same Vercel
-domain, so no frontend API URL needs to be changed after deployment. The same
-repository still works locally with the one-command startup above.
+User
+  ↓
+Planner Agent
+  ↓
+Triage Agent
+  ↓
+Scheduling Agent
+  ↓
+Response
