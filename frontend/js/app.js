@@ -1543,9 +1543,19 @@ async function handleSubmit(event) {
 
         if (!response.ok) {
 
-            throw new Error(
-                `Server returned ${response.status}`
-            );
+            let detail = `Server returned ${response.status}`;
+
+            try {
+                const errorData = await response.json();
+
+                if (typeof errorData.detail === "string") {
+                    detail = errorData.detail;
+                }
+            } catch (parseError) {
+                console.warn("Could not parse server error:", parseError);
+            }
+
+            throw new Error(detail);
 
         }
 
@@ -1666,7 +1676,7 @@ async function handleSubmit(event) {
 
 
         const errorMessage =
-            getErrorMessage();
+            error.message || getErrorMessage();
 
 
         conversation.messages.push({

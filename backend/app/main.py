@@ -14,9 +14,11 @@ from pydantic import BaseModel, Field
 # ENVIRONMENT
 # =========================================================
 
-ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = BACKEND_DIR.parent
 
-load_dotenv(ENV_FILE)
+load_dotenv(ROOT_DIR / ".env")
+load_dotenv(BACKEND_DIR / ".env", override=True)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
 
@@ -54,6 +56,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def remove_vercel_api_prefix(request, call_next):
+    if os.getenv("VERCEL") and request.scope["path"].startswith("/api"):
+        request.scope["path"] = request.scope["path"][4:] or "/"
+
+    return await call_next(request)
 
 
 # =========================================================
@@ -380,10 +390,10 @@ async def chat(request: ChatRequest):
     if not GROQ_API_KEY:
 
         raise HTTPException(
-            status_code=500,
+            status_code=503,
             detail=(
                 "GROQ_API_KEY is not configured. "
-                "Please add it to backend/.env."
+                "Add it to backend/.env or the repository root .env, then restart the backend."
             )
         )
 
